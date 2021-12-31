@@ -4,11 +4,13 @@ const Schema = mongoose.Schema;
 const profileSchema = new Schema({
 
     user:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"user"
+         type:String
     },
     about:{
         type:String
+    },
+    profilePhoto:{
+      type:String
     },
     address:{
         type:String,
@@ -17,15 +19,25 @@ const profileSchema = new Schema({
         maxlength:100
     },
     mobile:{
-        type:Number.EPSILON,
+        type:Number,
         required:true,
         minlength:10,
         maxlength:10
     },
+    socialMedia: {
+        facebook: {
+          type: String
+        },
+       instagram: {
+          type: String
+        },
+       
+      },
     date:{
         type:Date,
         defaults:Date.now
     }
+
 });
 
 const Profile = mongoose.model("Profile", profileSchema);
