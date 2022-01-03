@@ -1,0 +1,28 @@
+ 
+.heading{
+    background-image: url(../../../images/background.jpg);
+    height: 100vh;
+    background-size: cover;
+    position: relative;
+    
+}
+.heading h1{
+    font-size: 5rem;
+    color: #ffd300;
+    text-align: center;
+     
+}
+.heading h2{
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+}
+
+.heading-img{ 
+
+    position: absolute;
+    width: 35%;
+    bottom: 0;
+    right: 0;
+ 
+}

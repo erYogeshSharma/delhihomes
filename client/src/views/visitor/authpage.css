@@ -1,0 +1,44 @@
+/* body{
+   background-image: url('../../images/buland.jpg');
+   background-size: cover;
+ 
+
+} */
+.authcontainer{
+    width: 100%;
+    
+    background-image: url('../../images/buland.jpg');
+    background-size: cover;
+    height: 100%;
+}
+.authcontainer Button{
+    border-radius: 0%;
+    
+  
+    
+}
+.authcontainer .title{
+    color: white;
+    font-size: 2.5rem;
+    font-weight: normal;
+}
+.authpage{
+    background-color: rgb(17, 17, 17);
+    
+    
+}
+
+ 
+.authcontainer label{
+    color: white;
+
+}
+
+.authcontainer .switchmode{
+    border: 0;
+    
+    background: transparent;
+    color: rgb(255, 255, 255);
+    
+}
+ 

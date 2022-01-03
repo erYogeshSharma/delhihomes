@@ -34,6 +34,7 @@ export const updateProfile = async (req, res) => {
             res.status(200).send(newProfile);
 
         }
+        
 
     } else {
         await Profile.findByIdAndUpdate(

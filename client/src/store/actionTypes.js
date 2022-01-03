@@ -1,0 +1,9 @@
+export const AUTH = "AUTH";
+export const LOGOUT = "LOGOUT";
+export const SIGNUP = "SIGNUP";
+export const SIGNIN = 'SIGNIN';
+export const SET_ERRORS = 'SET_ERRORS';
+export const CLEAR_ERRORS = "CLEAR_ERRORS";
+export const SET_MESSAGE = "SET_MESSAGE";
+export const CLEAR_MESSAGE = 'SET_MESSAGE';
+export const SET_PROFILE = 'SET_PROFILE';
