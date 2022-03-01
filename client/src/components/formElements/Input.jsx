@@ -1,37 +1,45 @@
-import React from 'react'
+import React from "react";
+import { makeStyles } from "@mui/styles";
+import { TextField, Grid, InputAdornment, IconButton } from "@mui/material";
+import Visiblity from "@mui/icons-material/Visibility";
+import VisiblityOff from "@mui/icons-material/VisibilityOff";
 
+const useStyles = makeStyles((theme) => ({
+  inputRoot: {
+    color: "#fff",
+  },
+}));
 
-
-const restrictSpace = (e) => {
-    if(e.currentTarget.value.startsWith(" ")){
-        e.currentTarget.value ="";
-    }
+const Input = ({ error, name, half, handleChange, label, autoFocus, type, handleShowPassword }) => {
+  const classes = useStyles();
+  return (
+    <Grid mb={3} mt={2} item xs={12} sm={half ? 6 : 12}>
+      <TextField
+        name={name}
+        onChange={handleChange}
+        variant="outlined"
+        required
+        error={error ? true : false}
+        fullWidth
+        helperText={error}
+        label={label}
+        classes={{ root: classes.inputRoot }}
+        autoFocus={autoFocus}
+        type={type}
+        InputProps={
+          name === "password"
+            ? {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleShowPassword}>{type === "password" ? <Visiblity /> : <VisiblityOff />}</IconButton>
+                  </InputAdornment>
+                ),
+              }
+            : null
+        }
+      />
+    </Grid>
+  );
 };
-const Input = ({ error,classes,label,id,placeholder,name, onChange, value,validate, type='text'}) => {
-    let msg = "";
-    if(error){
-        msg = error ? 'is-invalid' : "";
-    }
-    return (
-        <div className = {`form-group ${classes}`}  >
-            <label htmlFor={name}>{label}</label>
-            <input
-                type={type}
-                className={`form-control ${msg}`}
-                placeholder={placeholder}
-                label={label}
-                
-                name = {name}
-                onChange={onChange}
-                value={value}
-                onKeyUp={validate}
-                onKeyDown={restrictSpace}
-                onFocus={validate}
-                id={id}
-            />
-            <div className='invalid-feedback'>{error}</div>
-        </div> 
-    )
-}
 
-export default Input
+export default Input;

@@ -1,26 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider} from 'react-redux';
-import { createStore, applyMiddleware, compose} from 'redux';
-import thunk from 'redux-thunk';
-
-
-import {reducers} from './store/reducers'
- 
-
-import "bootstrap/dist/css/bootstrap.css";
-import "font-awesome/css/font-awesome.css";
-
-import App from './App';
-
-const store = createStore(reducers, compose(applyMiddleware(thunk)));
-
-     
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store/store";
 
 ReactDOM.render(
-    <Provider store ={store}>
-       <App />
-    </Provider>
-   ,
-   document.getElementById('root'),
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>,
+  document.getElementById("root")
 );

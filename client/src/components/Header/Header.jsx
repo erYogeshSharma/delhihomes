@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import * as actionTypes from '../../store/actionTypes';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import decode from 'jwt-decode';
-import { Navbar, Container, Nav, NavDropdown, } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import './header.css'
-
-
+import React, { useState, useEffect } from "react";
+import * as actionTypes from "../../store/actionTypes";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import decode from "jwt-decode";
+import { AppBar, CssBaseline, Box, Toolbar, Typography, Tooltip, Grid, Button, IconButton, Menu, MenuItem, Avatar } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useDispatch } from "react-redux";
+import useStyles from "./styles";
 
 const Header = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -14,10 +13,11 @@ const Header = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const classes = useStyles();
 
   const logout = () => {
-    dispatch({ type: actionTypes.LOGOUT })
-    navigate('/auth');
+    dispatch({ type: actionTypes.LOGOUT });
+    navigate("/auth");
     setUser(null);
   };
 
@@ -28,43 +28,36 @@ const Header = () => {
       const decodedToken = decode(token);
 
       if (decodedToken.exp * 1000 < new Date().getTime()) logout();
-    };
+    }
 
-    setUser(JSON.parse(localStorage.getItem('profile')));
-  }, [location.pathname]);
-
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, [location]);
 
   return (
-    <Navbar collapseOnSelect className="navbar" expand="lg" bg="warning" variant="light">
-      <Container>
-        <Navbar.Brand className="fw-bold me-auto mu-auto" to="/" >Delhi Homes</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="ms-auto fw-bold">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#pricing">Properties</Nav.Link>
-            <Nav.Link href="#pricing">About</Nav.Link>
-            <Nav.Link href="#pricing">Contact</Nav.Link>
-            {user?.result ? (
-
-              <NavDropdown title={user.result.name} id="basic-nav-dropdown">
-                <NavDropdown.Item as={Link} to={user.result.email}>Dashboard</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={logout} >Logout</NavDropdown.Item>
-
-              </NavDropdown>
-
-
+    <AppBar position="fixed" classes={{ root: classes.appbar_root }}>
+      <Toolbar>
+        <Typography variant="h6" color="Text.subtitle" fontWeight="bold">
+          DelhiHomes
+        </Typography>
+        <Grid container direction="row" alignItems="center" justifyContent="space-between">
+          <Grid></Grid>
+          <Grid>
+            {user ? (
+              <div className={classes.profile}>
+                <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>
+                  {user?.result.name.charAt(0)}
+                </Avatar>
+              </div>
             ) : (
-
-              <Nav.Link as={Link} to="/auth" >Login</Nav.Link>
+              <Button className={classes.nav_btn} onClick={() => navigate("/auth")}>
+                Login
+              </Button>
             )}
-          </Nav>
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
+  );
+};
 
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  )
-}
-
-export default Header
+export default Header;
