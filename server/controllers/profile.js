@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
-
 import Profile from "../models/Profile.js";
 import User from "../models/user.js";
-
 import validateProfile from "../validation/profile.js";
 
 export const updateProfile = async (req, res) => {
@@ -13,67 +11,60 @@ export const updateProfile = async (req, res) => {
     return res.status(400).send(errors);
   }
 
-  const userProfile = req.body;
-  const profile = await Profile.findOne({ user: id });
-  const googleUser = await User.findOne({ googleId: id });
-  console.log(googleUser);
-
+  const profileDetails = req.body;
+  const profile = await Profile.findOne({
+    user: mongoose.Types.ObjectId(id),
+  });
   if (!profile) {
-    if (googleUser) {
-      const newProfile = await new Profile({ ...userProfile, user: id }).save();
-      res.status(200).send(newProfile);
-    } else {
-      const newProfile = await new Profile({ ...userProfile, user: id }).save();
-      res.status(200).send(newProfile);
-    }
+    const newProfile = await new Profile(profileDetails).save();
+    res.status(200).send(newProfile);
   } else {
-    await Profile.findByIdAndUpdate(profile._id, userProfile, { new: true });
+    const updateUser = await User.findByIdAndUpdate(id, {
+      name: req.body.name,
+      email: req.body.email,
+    });
+    const newProfile = await Profile.findOneAndUpdate({ user: mongoose.Types.ObjectId(id) }, { $set: profileDetails }, { new: true }).populate(
+      "user",
+      ["-password"]
+    );
+    res.status(200).send(newProfile);
   }
 };
 
 export const getProfile = async (req, res) => {
-  const { email } = req.params;
-  console.log(email);
-  const user = await User.findOne({ email: email });
+  const { id } = req.params;
 
-  //check if the user exists
-  if (!user) {
-    res.status(404).send({ error: "user not found" });
-  } else {
-    // check if it's a google authenticated user
-    if (user.googleId) {
-      const profile = await Profile.findOne({ user: user.googleId });
-      if (profile == null) {
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+    const profile = await Profile.findOne({
+      user: mongoose.Types.ObjectId(req.params.id),
+    }).populate("user", ["-password"]);
+
+    if (profile === null) {
+      let userDetail = await User.find({ _id: req.params.id }).select(["-password"]);
+
+      if (userDetail.length) {
         const profile = {
-          about: "",
+          user: {
+            name: userDetail[0].name,
+            email: userDetail[0].email,
+            _id: userDetail[0]._id,
+          },
           address: "",
+          about: "",
           mobile: "",
           socialMedia: {
-            facebook: "",
-            instagram: "",
+            facebook: "www.facebook.com",
+            instagram: "www.instagram.com",
           },
         };
-        res.status(200).send({ user, profile });
+        res.status(200).send(profile);
       } else {
-        res.status(200).send({ user, profile });
+        res.status(400).send("User Does not Exists");
       }
     } else {
-      //check it its our jwt user
-      const profile = await Profile.findOne({ user: user.id });
-      if (profile == null) {
-        const profile = {
-          about: "",
-          address: "",
-          mobile: "",
-          socialMedia: {
-            facebook: "",
-            instagram: "",
-          },
-        };
-        res.status(200).send({ user, profile });
-      } else {
-        res.status(200).send({ user, profile });
-      }
+      res.status(200).send(profile);
     }
+  } else {
+    res.status(400).send("Not Found");
   }
 };

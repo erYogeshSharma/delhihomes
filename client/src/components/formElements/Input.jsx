@@ -10,15 +10,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Input = ({ error, name, half, handleChange, label, autoFocus, type, handleShowPassword }) => {
+const Input = ({ error, value, name, half, onChange, label, autoFocus, type, handleShowPassword, required }) => {
   const classes = useStyles();
   return (
-    <Grid mb={3} mt={2} item xs={12} sm={half ? 6 : 12}>
+    <Grid mb={2} mt={1}>
       <TextField
         name={name}
-        onChange={handleChange}
+        onChange={onChange}
         variant="outlined"
-        required
+        required={required}
+        value={value}
         error={error ? true : false}
         fullWidth
         helperText={error}

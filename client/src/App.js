@@ -3,7 +3,7 @@ import Router from "./routes/routes";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material";
 import theme from "./assets/theme/theme";
-import "./index.css";
+import "./App.css";
 
 const App = () => {
   return (

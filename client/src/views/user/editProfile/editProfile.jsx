@@ -1,161 +1,100 @@
-import React, { useState, useEffect } from "react";
-import Input from "../../../components/formElements/Input";
-import TextArea from "../../../components/formElements/textArea";
-import { useNavigate } from "react-router";
-import editIcon from "../../../images/editIcon.png";
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Button, InputFeild } from "@mui/material";
 import FileBase from "react-file-base64";
-import { getProfile } from "../../../store/actions/profile";
-import "./editProfile.css";
-import { useSelector, useDispatch } from "react-redux";
-import { updateProfile } from "../../../store/actions/profile";
-import { useLocation } from "react-router";
 
-//profile model
-const profile = {
-  user: "",
-  profilePhoto: "",
-  about: "",
-  address: "",
-  mobile: "",
-  socialMedia: {
-    facebook: "",
-    instagram: "",
-  },
-};
+import { useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import Input from "../../../components/formElements/Input";
+import { getProfile, updateProfile } from "../../../store/actions/profile";
+import useStyles from "./styles";
 
 const EditProfile = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const errors = useSelector((state) => state.errors);
+  const form = { user: "", name: "", about: "", profilePhoto: "", mobile: "", socialMedia: { facebook: "", instagram: "" } };
   const dispatch = useDispatch();
-  console.log(profile);
-
-  const user = JSON.parse(localStorage.getItem("profile"));
-  const [userProfile, setUserProfile] = useState(profile);
-  const [id, setId] = useState(user.result.googleId ? user.result.googleId : user.result.id);
-
-  //   useEffect(() => {
-  //    dispatch(getProfile(user.result.email))
-
-  //  },[location])
-
-  //  if(preProfile) setUserProfile(preProfile);
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState(form);
+  const classes = useStyles();
+  const { auth, errors, userProfile } = useSelector((state) => state);
+  console.log(userProfile.profile);
 
   useEffect(() => {
-    dispatch(getProfile(user.result.email));
-  }, [user.result.email]);
+    dispatch(getProfile(auth.user._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const preProfile = useSelector((state) => state.userProfile.profile);
   useEffect(() => {
-    setUserProfile(preProfile);
-  }, [preProfile]);
+    if (!userProfile.loading) {
+      setProfile({
+        ...profile,
+        user: userProfile.profile.user._id,
+        name: userProfile.profile.user.name,
+        about: userProfile.profile.about,
+        address: userProfile.profile.address,
+        mobile: userProfile.profile.mobile.toString(),
+        socialMedia: userProfile.profile.socialMedia,
+        profilePhoto: userProfile.profile.profilePhoto || "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userProfile.profile]);
 
-  //checking if the user exists to acces the page
-  if (!user) {
-    navigate("/home");
-  }
-
-  // soving form data to the state
+  console.log(typeof profile.profilePhoto);
   const handleChange = (e) => {
     if (e.target.name === "facebook" || e.target.name === "instagram") {
-      setUserProfile((prevState) => ({
+      setProfile((prevState) => ({
         ...prevState,
         socialMedia: { ...prevState.socialMedia, [e.target.name]: e.target.value },
       }));
     } else {
-      //  setUserProfile({ ...userProfile, [e.target.name]: e.target.value });
-      setUserProfile({
-        profilePhoto: preProfile.profilePhoto,
-        about: preProfile.about,
-        address: preProfile.address,
-        mobile: preProfile.mobile,
-        socialMedia: preProfile.socialMedia,
-      });
+      setProfile({ ...profile, [e.target.name]: e.target.value });
     }
   };
-
-  console.log(userProfile);
-  const handleSubmit = async (e) => {
+  console.log(profile);
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    dispatch(updateProfile(userProfile, id, navigate));
+    dispatch(updateProfile(auth.user._id, profile, navigate));
   };
 
   return (
-    <div className="container-fluid py-5 edit-profile ">
-      <form className="border border-warning  p-4  mx-5    edit-form " onSubmit={handleSubmit}>
-        <h3>Update Profile</h3>
+    <Box className={classes.edit_page}>
+      <Grid className={classes.edit_form_container}>
+        <form onSubmit={handleSubmit}>
+          <Grid mb={2} container direction="row" alignItems="center" justifyContent="flex-start">
+            <Grid item className={classes.img_container}>
+              <img
+                className={classes.profile_image}
+                src={profile.profilePhoto ? profile.profilePhoto : "https://picsum.photos/200/200"}
+                alt="profile"
+              />
+            </Grid>
+            <Grid ml={2} item>
+              <FileBase type="file" multipe={false} onDone={({ base64 }) => setProfile({ ...profile, profilePhoto: base64 })} />
+            </Grid>
+          </Grid>
 
-        <div className="row">
-          <div className="col-md-6 col-sm-6   imagecont">
-            <img className=" profile-image " src={userProfile.profilePhoto} alt="profile image" />
-            <div className="imag-upload">
-              <FileBase
-                id="file-input"
-                type="file"
-                multiple={false}
-                onDone={({ base64 }) => setUserProfile({ ...userProfile, profilePhoto: base64 })}
-              />
-            </div>
-          </div>
-          <div className="col-md-6 col-sm-6">
-            <fieldset disabled>
-              <Input placeholder={user?.result.name} label="Name" id="disabledTextInput" />
-              <Input placeholder={user?.result.email} label="Email" id="disabledTextInput" />
-            </fieldset>
-          </div>
-        </div>
-        <div>
-          <TextArea
-            label="About"
-            name="about"
-            placeholder="few lines about yourself..."
-            onChange={handleChange}
-            value={userProfile.about}
-            error={errors.about}
-          />
-          <TextArea
-            label="Address"
-            name="address"
-            placeholder="Enter your Address..."
-            onChange={handleChange}
-            value={userProfile.address}
-            error={errors.address}
-          />
-
-          <div className="row mt-3">
-            <div className="col-sm-6 com-md-6">
-              <Input label="Phone Number" name="mobile" onChange={handleChange} value={userProfile.mobile} error={errors.mobile} />
-            </div>
-            <h5>Social Media</h5>
-            <div className="col-md-6 col-sm-6">
-              <Input
-                label="Facebook"
-                name="facebook"
-                onChange={handleChange}
-                error={errors.facebook}
-                value={userProfile.socialMedia.facebook ? userProfile.socialMedia.facebook : " "}
-              />
-            </div>
-            <div className="col-md-6 col-sm-6">
-              <Input
-                label="Instagram"
-                name="instagram"
-                onChange={handleChange}
-                error={errors.instagram}
-                value={userProfile.socialMedia.instagram ? userProfile.socialMedia.instagram : " "}
-              />
-            </div>
-          </div>
-          <hr />
-          <div className="col-12 col-md-12 col-sm-12 col-lg-12 text-center mt-5">
-            <button type="submit" onClick={handleSubmit} className="btn btn-outline-warning px-5 button">
-              Update
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
+          <Input label="Name" onChange={handleChange} name="name" value={profile.name} error={errors?.name} />
+          <Input label="About" onChange={handleChange} name="about" value={profile.about} error={errors?.about} />
+          <Grid>
+            <Input label="Address" onChange={handleChange} name="address" value={profile.address} error={errors?.address} />
+          </Grid>
+          <Grid spacing={1} container direction="row">
+            <Grid item lg={6} xs={12}>
+              <Input label="mobile" onChange={handleChange} name="mobile" value={profile.mobile} error={errors?.mobile} />
+            </Grid>
+            <Grid item lg={6} xs={12}></Grid>
+            <Grid item lg={6} xs={12}>
+              <Input label="facebook" onChange={handleChange} name="facebook" value={profile.socialMedia.facebook} error={errors?.facebook} />
+            </Grid>
+            <Grid item lg={6} xs={12}>
+              <Input label="instagram" onChange={handleChange} name="instagram" value={profile.socialMedia.instagram} error={errors?.instagram} />
+            </Grid>
+          </Grid>
+          <Button fullWidth variant="contained" color="danger" onClick={handleSubmit}>
+            Update
+          </Button>
+        </form>
+      </Grid>
+    </Box>
   );
 };
 

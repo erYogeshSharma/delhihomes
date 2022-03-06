@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Button, Box, Typography, Link } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
@@ -10,8 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { signup, signin, googleLogin } from "../../store/actions/auth";
 import Input from "../../components/formElements/Input";
-import { AUTH } from "../../store/actionTypes";
-
 const initialState = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "", errors: {} };
 
 const AuthPage = () => {
@@ -19,7 +16,6 @@ const AuthPage = () => {
   const errors = useSelector((state) => state.errors);
   const data = useSelector((state) => state);
   const classes = useStyles();
-  console.log(data);
 
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
@@ -29,12 +25,14 @@ const AuthPage = () => {
 
   const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 
-  if (msg) {
-    toast.success(msg);
-  }
-  if (errors.error) {
-    toast.error(errors.error);
-  }
+  useEffect(() => {
+    if (msg) {
+      toast.success(msg);
+    }
+    if (errors.error) {
+      toast.error(errors.error);
+    }
+  }, [msg, errors]);
 
   const switchMode = () => {
     setForm(initialState);
@@ -65,6 +63,7 @@ const AuthPage = () => {
   const googleError = () => console.log.apply("Google Sign in was unsuccesful. Try again later");
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  console.log(initialState);
 
   return (
     <Box className={classes.login_page}>

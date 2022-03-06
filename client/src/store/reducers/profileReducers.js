@@ -1,23 +1,16 @@
-import { SET_PROFILE } from '../actionTypes';
+import { SET_PROFILE } from "../actionTypes";
 
 const user = {
-    user:{},
-    profile:{},
-    loading: false
-
+  profile: {},
+  loading: true,
 };
 
-export default (state =  user, action) => {
-    switch (action.type) {
-        case SET_PROFILE:
-            return {...state,
-                 user :action.payload.user,
-                 profile:action.payload.profile,
-                 loading:false};
+export default function ProfileReducers(state = user, action) {
+  switch (action.type) {
+    case SET_PROFILE:
+      return { ...state, profile: action.payload, loading: false };
 
-
-
-        default:
-            return user;
-    }
+    default:
+      return user;
+  }
 }

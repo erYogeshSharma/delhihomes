@@ -43,7 +43,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundOpacity: "100%",
-
           textAlign: "left",
         },
       },

@@ -1,9 +1,10 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
 const propertySchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: "User",
   },
   title: {
     type: String,
@@ -11,10 +12,9 @@ const propertySchema = new Schema({
     minlength: 5,
     maxlength: 30,
   },
-  imgUrl: {
-    type: String,
+  photos: {
+    type: Array,
     required: true,
-    default: "http://placehold.jp/300*250.png",
   },
   price: {
     type: Number,
@@ -35,16 +35,16 @@ const propertySchema = new Schema({
   state: {
     type: String,
     required: true,
-    minlength: 10,
+    minlength: 5,
     maxlength: 30,
   },
   city: {
     type: String,
     required: true,
-    minlength: 10,
+    minlength: 5,
     maxlength: 30,
   },
-  Zip: {
+  zip: {
     type: Number,
     required: true,
   },
@@ -76,7 +76,7 @@ const propertySchema = new Schema({
     tv: { type: Boolean, default: false },
     library: { type: Boolean, default: false },
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },

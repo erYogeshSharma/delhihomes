@@ -3,8 +3,8 @@ import * as api from "../../api/index.js";
 
 export const googleLogin = (result, token) => async (dispatch) => {
   try {
-    dispatch({ type: actionTypes.AUTH, payload: { result, token } });
-    await api.googleLogin(result);
+    const { data } = await api.googleLogin(result);
+    dispatch({ type: actionTypes.GOOGLE_AUTH, payload: { local: { result, token }, data } });
     console.log(result);
   } catch (error) {
     console.log(error);
@@ -45,10 +45,8 @@ export const signin = (formData, navigate) => async (dispatch) => {
   dispatch({
     type: actionTypes.CLEAR_ERRORS,
   });
-
   try {
     const { data } = await api.signIn(formData);
-
     if (data) {
       dispatch({
         type: actionTypes.AUTH,
