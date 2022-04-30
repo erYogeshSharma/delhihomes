@@ -52,7 +52,7 @@ const Header = () => {
     <AppBar elevation={0} position="fixed" classes={{ root: classes.appbar_root }}>
       <Toolbar>
         <Typography variant="h6" color="Text.subtitle" fontWeight="bold">
-          DelhiHomes
+          {/* DelhiHomes */}
         </Typography>
         <Grid container direction="row" alignItems="center" justifyContent="space-between">
           <Grid></Grid>

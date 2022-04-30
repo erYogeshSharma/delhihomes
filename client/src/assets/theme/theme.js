@@ -21,6 +21,8 @@ const theme = createTheme({
       main: "#1d1d1f",
       subtitles: "#4f4f49",
       captions: "#858585",
+      whiteLite: "#f2f3f4",
+      grey: "#cfcfcf",
     },
     danger: {
       main: "#b00020",
@@ -29,6 +31,42 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: "Inter",
+    color: "#1d1d1f",
+    h6: {
+      fontSize: 22,
+      color: "#1d1d1f",
+      fontWeight: 700,
+    },
+    h5: {
+      fontSize: 27,
+      color: "#1d1d1f",
+      fontWeight: 700,
+    },
+    body2thin: {
+      fontSize: 15,
+      color: "#4f4f49",
+      fontWeight: 500,
+    },
+    body1: {
+      fontSize: 17,
+      color: "#4f4f49",
+      fontWeight: 700,
+    },
+    body1thin: {
+      fontSize: 17,
+      fontWeight: 500,
+      color: "#4f4f49",
+    },
+    body2: {
+      fontSize: 15,
+      color: "#1d1d1f",
+      fontWeight: 700,
+    },
+    link: {
+      color: "#4f4f49",
+      fontSize: 13,
+      fontWeight: 600,
+    },
   },
 
   components: {

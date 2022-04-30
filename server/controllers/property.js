@@ -15,12 +15,12 @@ export const getProperty = async (req, res) => {
 
 export const createProperty = async (req, res) => {
   const property = req.body;
-  const { id } = req.params;
+  const user = req.userProfile._id;
   const { errors, isValid } = validateProperty(req.body);
   if (!isValid) {
     return res.status(400).send(errors);
   }
-  const newProperty = await new Property({ ...property, user: id, createdAt: new Date().toISOString() });
+  const newProperty = await new Property({ ...property, user: user, createdAt: new Date().toISOString() });
   try {
     await newProperty.save();
     res.status(202).json(newProperty);
@@ -31,17 +31,16 @@ export const createProperty = async (req, res) => {
 
 export const updateProperty = async (req, res) => {
   const property = req.body;
-  const { id, user } = req.params;
+  const { id } = req.params;
+  const user = req.userProfile._id;
+
   const { errors, isValid } = validateProperty(req.body);
-  console.log(req.userId);
   if (!isValid) {
     return res.status(400).send(errors);
   }
   if (mongoose.Types.ObjectId.isValid(id)) {
     const oldProperty = await Property.findOne({ _id: id });
-    console.log(user);
-    console.log(oldProperty.user.valueOf());
-    if (user === oldProperty.user.valueOf()) {
+    if (user.valueOf() === oldProperty.user.valueOf()) {
       if (oldProperty) {
         const updatedProperty = await Property.findByIdAndUpdate(id, { ...property }, { new: true });
         res.status(200).send(updatedProperty);

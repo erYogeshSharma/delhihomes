@@ -5,8 +5,8 @@ import { getProperty, updateProperty, createProperty, deleteProperty, getPropert
 const router = express.Router();
 router.get("/:id", getProperty);
 router.get("/", getProperties);
-router.patch("/:id/user/:user", auth, updateProperty);
-router.post("/:id", auth, createProperty);
+router.patch("/:id", auth, updateProperty);
+router.post("/", auth, createProperty);
 router.delete("/:id", auth, deleteProperty);
 
 export default router;

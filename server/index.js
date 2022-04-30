@@ -24,3 +24,16 @@ mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => app.listen(PORT, () => console.log(`server running on Port: http://localhost:${PORT}`)))
   .catch((error) => console.log(`${error} did not connect`));
+
+//Handle Promise Rejection
+process.on("unhandledRejection", (error) => {
+  throw error;
+});
+
+process.on("uncaughtException", function (err) {
+  console.error(new Date().toUTCString() + " uncaughtException:", err.message);
+  console.error(err.stack);
+  // Send the error log to your email
+  // sendMail(err);
+  process.exit(1);
+});

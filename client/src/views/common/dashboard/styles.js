@@ -20,10 +20,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey.main,
     border: "3px solid #7a7a7a ",
   },
-  content: {
-    paddingLeft: "240px",
-    backgroundColor: "#000",
-  },
+  // content: {
+  //   paddingLeft: "240px",
+  //   backgroundColor: "#000",
+  // },
   toolbar: theme.mixins.toolbar,
 }));
 export default useStyles;

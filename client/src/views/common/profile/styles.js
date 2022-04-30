@@ -1,19 +1,30 @@
 import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles((theme) => ({
-  profile_img: {
-    maxWidth: "100%",
-    maxHeight: "100%",
+  profile_container: {
+    backgroundColor: "#fff",
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+    // boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
   },
-  profileDetails_container: {
-    backgroundColor: theme.palette.text.main,
-    padding: "20px",
-    width: "500px",
-    margin: "auto",
+  profile_bottom: {
+    display: "flex",
+
+    // alignItems: "center",
+    //justifyContent: "center",
+    backgroundColor: "#000",
+    height: "50px",
   },
   profile_img_container: {
-    width: "150px",
     height: "150px",
-    border: "2px solid #ffd300",
+    width: "150px",
+    borderRadius: "100%",
+  },
+  profile_img: {
+    maxHeight: "100%",
+    maxWidth: "100%",
+    borderRadius: "100%",
   },
 }));
 
