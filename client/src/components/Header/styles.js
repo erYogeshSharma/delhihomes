@@ -18,7 +18,8 @@ export default makeStyles((theme) => ({
   },
   appbar_root: {
     padding: 0,
-    backgroundColor: "#ffd2308",
+    backgroundColor: "#ffd300",
+    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
   },
   drawer: {
     width: drawerWidth,

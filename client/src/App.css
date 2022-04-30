@@ -2,4 +2,6 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: #d1d1d1;
+  font-family: Inter;
 }

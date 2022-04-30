@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import keys from "../config/keys_dev.js";
-
+import User from "../models/user.js";
 const secret = keys.secretOrKey;
 const auth = async (req, res, next) => {
   try {
@@ -11,11 +11,14 @@ const auth = async (req, res, next) => {
 
     if (token && isCustomAuth) {
       decodeData = jwt.verify(token, secret);
+      const user = await User.findById(decodeData._id);
+      req.userProfile = user;
 
       req.userId = decodeData?.id;
     } else {
       decodeData = jwt.decode(token);
-      req.userId = decodeData?.sub;
+      const user = await User.findOne({ email: decodeData.email });
+      req.userProfile = user;
     }
 
     next();
